@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper 
+ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ 
+ <mapper namespace="spms.dao.MemberDao">
+  <resultMap type="member" id="memberResultMap">
+    <id column="MNO" property="no" />
+    <result column="MNAME"		property="name" />
+    <result column="EMAIL"		property="email" />
+    <!-- <result column="CRE_DATE"	property="createdDate" /> --> <!-- Thu Dec 05 07:06:15 KST 2019 -->
+    <result column="CRE_DATE"	property="createdDate" javaType="java.sql.Date"/> <!-- 2019-12-05 -->
+  </resultMap>
+ 
+  <select id="selectList" parameterType="map" resultMap="memberResultMap">
+  	SELECT MNO,MNAME,EMAIL,CRE_DATE
+	FROM MEMBERS
+	ORDER BY
+	<choose>
+		<when test="orderCond == 'NAME_ASC'">MNAME asc</when>
+		<when test="orderCond == 'NAME_DESC'">MNAME desc</when>
+		<when test="orderCond == 'EMAIL_ASC'">EMAIL asc</when>
+		<when test="orderCond == 'EMAIL_DESC'">EMAIL desc</when>
+		<when test="orderCond == 'CREDATE_ASC'">CRE_DATE asc</when>
+		<when test="orderCond == 'CREDATE_DESC'">CRE_DATE desc</when>
+		<when test="orderCond == 'MNO_ASC'">MNO asc</when>
+		<otherwise>MNO desc</otherwise>
+	</choose>
+  </select>
+  
+  <insert id="insert" parameterType="member">
+  	INSERT INTO MEMBERS(EMAIL,PWD,MNAME,CRE_DATE,MOD_DATE) VALUES (#{email},#{password},#{name},NOW(),NOW());
+  </insert>
+  
+  <delete id="delete" parameterType="int">
+  	delete from MEMBERS where MNO=#{value}
+  </delete>
+  
+  <select id="selectOne" parameterType="int" resultMap="memberResultMap">
+  	select MNO, EMAIL, MNAME, CRE_DATE
+  	from MEMBERS
+	where MNO=#{value}
+  </select>
+  
+  <update id="update" parameterType="map">
+  	UPDATE MEMBERS
+  	<set>
+  	 <if test="email != null">EMAIL=#{email},</if>
+  	 <if test="name != null">MNAME=#{name},</if>
+  	 MOD_DATE=NOW()
+  	</set>
+	WHERE MNO=#{no} 
+  </update>  
+  
+  <select id="exist" parameterType="map" resultMap="memberResultMap">
+  	SELECT MNAME,EMAIL FROM MEMBERS
+	WHERE EMAIL=#{email} AND PWD=#{password}
+  </select>
+ </mapper>

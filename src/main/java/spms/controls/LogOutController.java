@@ -1,9 +1,12 @@
 package spms.controls;
 
 import java.util.Map;
+
 import javax.servlet.http.HttpSession;
 
-import spms.annotation.Component;
+import org.springframework.stereotype.Component;
+
+//import spms.annotation.Component;
 
 @Component(value="/auth/logout.do")
 public class LogOutController implements Controller {

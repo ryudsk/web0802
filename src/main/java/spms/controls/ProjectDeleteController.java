@@ -2,7 +2,9 @@ package spms.controls;
 
 import java.util.Map;
 
-import spms.annotation.Component;
+import org.springframework.stereotype.Component;
+
+//import spms.annotation.Component;
 import spms.bind.DataBinding;
 import spms.dao.MySqlProjectDao;
 
